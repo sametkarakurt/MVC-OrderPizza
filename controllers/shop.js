@@ -16,6 +16,18 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
+exports.getPizza = (req, res, next) => {
+  Product.getPizza(req.params.productid)
+    .then((pizza) => {
+      res.render("shop/pizza", {
+        pizza: pizza[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 exports.getAddProduct = (req, res, next) => {
   res.render("shop/add-product");
 };
@@ -24,13 +36,52 @@ exports.postAddProduct = (req, res, next) => {
   const product = new Product();
 
   product.name = req.body.name;
-  product.price = req.body.price;
-  product.description = req.body.description;
+  product.telefonNo = req.body.telefonNo;
+  product.adres = req.body.adres;
+  product.pizzaTercihi = req.body.pizzaSecenek;
+  product.hamurTuru = req.body.hamurId;
+  product.sosTuru = req.body.sosId;
+  product.boyut = req.body.boyutId;
+  product.peynirMiktari = req.body.peynirId;
+  product.kenarTuru = req.body.kenarId;
+  product.odemeTuru = req.body.odemeId;
+  product.teslimatTuru = req.body.teslimatId;
+  product.sube = req.body.subeId;
+  product.personelId = req.body.personelId;
+  product.ucret = req.body.ucret;
 
   product
-    .saveProduct()
+    .saveCustomer()
     .then(() => {
-      res.redirect("/products");
+      product
+        .savePizza()
+        .then(() => {
+          product
+            .saveOrder()
+            .then(() => {
+              product
+                .saveOrderPizza()
+                .then(() => {
+                  product
+                    .saveSide()
+                    .then(() => {
+                      res.redirect("/products");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -51,10 +102,11 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
   const product = new Product();
-  product.id = req.body.id;
+  product.musteriId = req.body.musteriId;
+  console.log(req.body.musteriId);
   product.name = req.body.name;
-  product.price = req.body.price;
-  product.description = req.body.description;
+  product.telefonNo = req.body.telefonNo;
+  product.adres = req.body.adres;
 
   Product.Update(product)
     .then(() => {
@@ -66,9 +118,21 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  Product.DeleteById(req.body.productid)
+  Product.DeletePizzaOrder(req.body.productid)
     .then(() => {
-      res.redirect("/products");
+      Product.DeleteSide(req.body.productid)
+        .then(() => {
+          Product.DeleteOrder(req.body.productid)
+            .then(() => {
+              res.redirect("/products");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => {
       console.log(err);

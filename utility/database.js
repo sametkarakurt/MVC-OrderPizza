@@ -5,7 +5,7 @@ const client = new Client({
   user: "postgres",
   port: 5432,
   password: "Smt1728+",
-  database: "dbtest",
+  database: "pizza_order",
 });
 
 module.exports = client;

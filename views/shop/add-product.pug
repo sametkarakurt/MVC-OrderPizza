@@ -4,23 +4,120 @@ block styles
     link(rel="stylesheet" href="/css/forms.css")
 
 block content
+
     form(action="/add-product" method="POST")
-        .form-group.row
-            label(for="name").col-sm-2.col-form-label Product Name
-            .col-sm-10
-                input.form-control#name(type="text" name="name")  
+
+        .h3 Müşteri Bilgileri
 
         .form-group.row
-            label(for="price").col-sm-2.col-form-label Price
+            label(for="name").col-sm-2.col-form-label Ad Soyad
             .col-sm-10
-                input.form-control#price(type="text" name="price") 
+                input.form-control(type="text" name="name")
 
         .form-group.row
-            label(for="description").col-sm-2.col-form-label Description
+            label(for="telefonNo").col-sm-2.col-form-label Telefon Numarası
             .col-sm-10
-                textarea.form-control(name="description" cols="30" rows="10") 
+                input.form-control(type="text" name="telefonNo")
+
+        .form-group.row
+            label(for="adres").col-sm-2.col-form-label Adres
+            .col-sm-10
+                input.form-control(type="text" name="adres")  
+
+        .h3 Pizza
+
+        .form-group.row
+            label(for="pizzaSecenek").col-sm-2.col-form-label Pizza Tercihi
+            .col-sm-10
+                select.form-control(name="pizzaSecenek")
+                    option(value="1") Bol Malzemos
+                    option(value="2") Tavuklu
+                    option(value="3") Sucuksever
+                    option(value="4") Karışık Pizza
+                    option(value="5") Margarita
+                    option(value="6") Italiano
+
+        .form-group.row
+            label(for="hamurId").col-sm-2.col-form-label Hamur Türü
+            .col-sm-10
+                select.form-control(name="hamurId")
+                    option(value="1") Orijinal
+                    option(value="2") İtalyan
+                    option(value="3") Peynirli
+
+        .form-group.row
+            label(for="sosId").col-sm-2.col-form-label Sos Türü
+            .col-sm-10
+                select.form-control(name="sosId")
+                    option(value="1") Sarımsak
+                    option(value="2") Ballı Hardallı
+                    option(value="3") Barbekü
+                    option(value="4") Domino's
+
+        .form-group.row
+            label(for="boyutId").col-sm-2.col-form-label Boyut
+            .col-sm-10
+                select.form-control(name="boyutId")
+                    option(value="1") Küçük
+                    option(value="2") Orta
+                    option(value="3") Büyük
+
+        .form-group.row
+            label(for="peynirId").col-sm-2.col-form-label Peynir Miktarı
+            .col-sm-10
+                select.form-control(name="peynirId")
+                    option(value="1") Az
+                    option(value="2") Orta
+                    option(value="3") Çok
+
+
+        .form-group.row
+            label(for="kenarId").col-sm-2.col-form-label Kenar Türü
+            .col-sm-10
+                select.form-control(name="kenarId")
+                    option(value="1") Sarımsak
+                    option(value="2") Barbekülü
+                    option(value="3") Ballı Hardallı
+
+        .h3 Sipariş Detayı
+
+        .form-group.row
+            label(for="odemeId").col-sm-2.col-form-label Ödeme Türü
+            .col-sm-10
+                select.form-control(name="odemeId")
+                    option(value="1") Kartla Ödeme
+                    option(value="2") Kapıda Ödeme
+        
+
+        .form-group.row
+            label(for="teslimatId").col-sm-2.col-form-label Teslimat Türü
+            .col-sm-10
+                select.form-control(name="teslimatId")
+                    option(value="1") Şubeden Teslim
+                    option(value="2") Eve Teslim
+
+        .form-group.row
+            label(for="subeId").col-sm-2.col-form-label Şube
+            .col-sm-10
+                select.form-control(name="subeId")
+                    option(value="1") Serdivan
+                    option(value="2") Adapazarı
+
+        .form-group.row
+            label(for="personelId").col-sm-2.col-form-label Personel
+            .col-sm-10
+                select.form-control(name="personelId")
+                    option(value="1") Ahmet Kapıcı
+                    option(value="2") Elif Aydın
+                    option(value="3") Sercan Polat
+                    option(value="4") Nisa Tunahan
+
+        .form-group.row
+            label(for="ucret").col-sm-2.col-form-label Ücret
+            .col-sm-10
+                input.form-control(type="text" name="ucret")    
                 
         .form-group.row
             .col-sm-10.offset-sm-2
-                input(type="submit" value="Save Product").btn.btn-primary   
+                input(type="submit" value="Ekle").btn.btn-primary   
            

@@ -6,19 +6,34 @@ block content
         table.table.table-bordered
             thead
                 tr
-                    th Product Name
-                    th Price
-                    th(style="width:133px;")
+                    th Ad-Soyad
+                    th Numara
+                    th Adres
+                    th Ödeme Türü
+                    th Teslimat Şekli
+                    th Şube
+                    th Personel
+                    th Ücret
+                    th Düzenleme
+                    
             tbody
                 each product in products
                     tr
-                        td #{product.name}
-                        td #{product.price} TL
+                        td #{product.ad_soyad}
+                        td #{product.telefon_no}
+                        td #{product.adres}
+                        td #{product.odeme_turu}
+                        td #{product.teslimat_turu}
+                        td #{product.sube_adi}
+                        td #{product.personel_adi}
+                        td #{product.ucret}
+                        
                         td 
-                            a.btn.btn-primary.btn-sm.mr-2(href=`/editproduct/${product.id}`) Edit
+                            a.btn.btn-secondary.btn-sm.mr-2(href=`/pizza/${product.siparis_id}`) Pizza
+                            a.btn.btn-primary.btn-sm.mr-2(href=`/editproduct/${product.siparis_id}`) Güncelle
 
                             form(action='/delete-product' method='POST')
-                                input(type='hidden' name='productid' value=`${product.id}`)
-                                button(type='submit').btn.btn-danger.btn-sm Delete
+                                input(type='hidden' name='productid' value=`${product.siparis_id}`)
+                                button(type='submit').btn.btn-danger.btn-sm Sil
     else
-        h1 No Products     
+        h1 Sipariş Yok     

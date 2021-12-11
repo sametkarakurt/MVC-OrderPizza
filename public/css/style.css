@@ -1,3 +1,28 @@
 .pt-100 {
-    padding-top: 100px;
+  padding-top: 100px;
+}
+
+.navbar {
+  background-color: black !important;
+  height: 80px;
+}
+
+.logo {
+  width: 200px;
+  height: 50px;
+}
+
+.card-image {
+  width: 280.5px;
+  height: 210px;
+  border-radius: 4px;
+}
+
+.card {
+  width: 280.5px !important;
+  align-items: center;
+}
+
+.row {
+  margin-top: 50px;
 }
