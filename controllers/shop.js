@@ -59,21 +59,7 @@ exports.postAddProduct = (req, res, next) => {
           product
             .saveOrder()
             .then(() => {
-              product
-                .saveOrderPizza()
-                .then(() => {
-                  product
-                    .saveSide()
-                    .then(() => {
-                      res.redirect("/products");
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              res.redirect("/products");
             })
             .catch((err) => {
               console.log(err);
@@ -118,25 +104,13 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  Product.DeletePizzaOrder(req.body.productid)
+  Product.DeleteOrder(req.body.productid)
     .then(() => {
-      Product.DeleteSide(req.body.productid)
+      Product.DeletePizza(req.body.productid)
         .then(() => {
-          Product.DeleteOrder(req.body.productid)
+          Product.DeleteCustomer(req.body.musteriId)
             .then(() => {
-              Product.DeletePizza(req.body.productid)
-                .then(() => {
-                  Product.DeleteCustomer(req.body.musteriId)
-                    .then(() => {
-                      res.redirect("/products");
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+              res.redirect("/products");
             })
             .catch((err) => {
               console.log(err);

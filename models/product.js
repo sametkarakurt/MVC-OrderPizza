@@ -56,13 +56,14 @@ module.exports = class Product {
 
   savePizza() {
     return client
-      .query("CALL save_pizza($1, $2, $3, $4, $5, $6)", [
+      .query("CALL save_pizza($1, $2, $3, $4, $5, $6, $7)", [
         this.pizzaId,
         this.pizzaTercihi,
         this.hamurTuru,
         this.sosTuru,
         this.boyut,
         this.peynirMiktari,
+        this.kenarTuru,
       ])
       .then((result) => {
         return result;
@@ -74,7 +75,7 @@ module.exports = class Product {
 
   saveOrder() {
     return client
-      .query("CALL save_order($1, $2, $3, $4, $5, $6, $7)", [
+      .query("CALL save_order($1, $2, $3, $4, $5, $6, $7, $8)", [
         this.siparisId,
         this.musteriId,
         this.odemeTuru,
@@ -82,29 +83,8 @@ module.exports = class Product {
         this.sube,
         this.personelId,
         this.ucret,
+        this.pizzaId,
       ])
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  saveOrderPizza() {
-    return client
-      .query("CALL save_order_pizza($1, $2)", [this.pizzaId, this.siparisId])
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  saveSide() {
-    return client
-      .query("CALL save_side($1, $2)", [this.siparisId, this.kenarTuru])
       .then((result) => {
         return result;
       })
@@ -144,7 +124,7 @@ module.exports = class Product {
   static getPizza(id) {
     return client
       .query(
-        "SELECT * FROM pizza JOIN pizza_siparis on pizza.pizza_id = pizza_siparis.pizza_id JOIN siparis on siparis.siparis_id = pizza_siparis.siparis_id JOIN kenar_siparisi on kenar_siparisi.siparis_id = siparis.siparis_id JOIN kenar on kenar.kenar_id = kenar_siparisi.kenar_id JOIN hamur on hamur.hamur_id = pizza.hamur_id JOIN sos on sos.sos_id = pizza.sos_id JOIN boyut on boyut.boyut_id = pizza.boyut_id JOIN peynir on peynir.peynir_id = pizza.peynir_id JOIN pizza_secenekleri on pizza_secenekleri.pizza_secenek_id = pizza.pizza_secenek_id WHERE siparis.siparis_id = $1",
+        "SELECT * FROM pizza JOIN siparis on siparis.pizza_id = pizza.pizza_id JOIN kenar on kenar.kenar_id = pizza.kenar_id JOIN hamur on hamur.hamur_id = pizza.hamur_id JOIN sos on sos.sos_id = pizza.sos_id JOIN boyut on boyut.boyut_id = pizza.boyut_id JOIN peynir on peynir.peynir_id = pizza.peynir_id JOIN pizza_secenekleri on pizza_secenekleri.pizza_secenek_id = pizza.pizza_secenek_id WHERE siparis.siparis_id = $1",
         [id]
       )
       .then((result) => {
@@ -164,32 +144,6 @@ module.exports = class Product {
     ]);
   }
 
-  static DeletePizzaOrder(id) {
-    return client
-      .query("DELETE FROM pizza_siparis WHERE pizza_siparis.siparis_id=$1", [
-        id,
-      ])
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  static DeleteSide(id) {
-    return client
-      .query("DELETE FROM kenar_siparisi WHERE kenar_siparisi.siparis_id=$1", [
-        id,
-      ])
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   static DeleteOrder(id) {
     return client
       .query("DELETE FROM siparis WHERE siparis.siparis_id=$1", [id])
@@ -204,7 +158,7 @@ module.exports = class Product {
   static DeletePizza(id) {
     return client
       .query(
-        "DELETE FROM pizza where pizza_id=(SELECT pizza_id FROM pizza_siparis WHERE siparis_id = $1)",
+        "DELETE FROM pizza where pizza_id=(SELECT pizza_id FROM siparis WHERE siparis_id = $1)",
         [id]
       )
       .then((result) => {

@@ -24,13 +24,6 @@ CREATE TABLE IF NOT EXISTS public.kenar
     CONSTRAINT kenar_pkey PRIMARY KEY (kenar_id)
 );
 
-CREATE TABLE IF NOT EXISTS public.kenar_siparisi
-(
-    siparis_id integer NOT NULL,
-    kenar_id integer NOT NULL,
-    CONSTRAINT kenar_siparisi_pkey PRIMARY KEY (siparis_id, kenar_id)
-);
-
 CREATE TABLE IF NOT EXISTS public.musteri
 (
     musteri_id integer NOT NULL,
@@ -69,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.pizza
     boyut_id integer NOT NULL,
     peynir_id integer NOT NULL,
     pizza_secenek_id integer NOT NULL,
+    kenar_id integer NOT NULL,
     CONSTRAINT pizza_pkey PRIMARY KEY (pizza_id)
 );
 
@@ -77,13 +71,6 @@ CREATE TABLE IF NOT EXISTS public.pizza_secenekleri
     pizza_secenek_id integer NOT NULL,
     pizza_secenegi character varying COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT pizza_secenekleri_pkey PRIMARY KEY (pizza_secenek_id)
-);
-
-CREATE TABLE IF NOT EXISTS public.pizza_siparis
-(
-    pizza_id integer NOT NULL,
-    siparis_id integer NOT NULL,
-    CONSTRAINT pizza_siparis_pkey PRIMARY KEY (pizza_id, siparis_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.siparis
@@ -95,6 +82,7 @@ CREATE TABLE IF NOT EXISTS public.siparis
     sube_id integer NOT NULL,
     ucret integer NOT NULL,
     personel_id integer NOT NULL,
+    pizza_id integer NOT NULL,
     CONSTRAINT siparis_pkey PRIMARY KEY (siparis_id)
 );
 
@@ -131,22 +119,6 @@ CREATE TABLE IF NOT EXISTS public.toplam_siparis
     toplam_siparis integer
 );
 
-ALTER TABLE IF EXISTS public.kenar_siparisi
-    ADD CONSTRAINT kenar_id FOREIGN KEY (kenar_id)
-    REFERENCES public.kenar (kenar_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public.kenar_siparisi
-    ADD CONSTRAINT siparis_id FOREIGN KEY (siparis_id)
-    REFERENCES public.siparis (siparis_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-
 ALTER TABLE IF EXISTS public.pizza
     ADD CONSTRAINT boyut_id FOREIGN KEY (boyut_id)
     REFERENCES public.boyut (boyut_id) MATCH SIMPLE
@@ -158,6 +130,14 @@ ALTER TABLE IF EXISTS public.pizza
 ALTER TABLE IF EXISTS public.pizza
     ADD CONSTRAINT hamur_id FOREIGN KEY (hamur_id)
     REFERENCES public.hamur (hamur_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.pizza
+    ADD CONSTRAINT kenar_id FOREIGN KEY (kenar_id)
+    REFERENCES public.kenar (kenar_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -184,22 +164,6 @@ ALTER TABLE IF EXISTS public.pizza
     REFERENCES public.sos (sos_id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public.pizza_siparis
-    ADD CONSTRAINT pizza_id FOREIGN KEY (pizza_id)
-    REFERENCES public.pizza (pizza_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE
-    NOT VALID;
-
-
-ALTER TABLE IF EXISTS public.pizza_siparis
-    ADD CONSTRAINT siparis_id FOREIGN KEY (siparis_id)
-    REFERENCES public.siparis (siparis_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -333,56 +297,31 @@ $$;
 
 --SİPARİŞ KAYDETME--
 
-CREATE PROCEDURE save_order(integer,integer,integer,integer,integer,integer,integer)
+CREATE PROCEDURE save_order(integer,integer,integer,integer,integer,integer,integer,integer)
 LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-INSERT INTO siparis (siparis_id, musteri_id, odeme_id, teslimat_id, sube_id, personel_id, ucret) VALUES ($1, $2, $3, $4, $5, $6, $7);
+INSERT INTO siparis (siparis_id, musteri_id, odeme_id, teslimat_id, sube_id, personel_id, ucret,pizza_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
 COMMIT;
 
 END;
 $$;
 
-
---PİZZA SİPARİS KAYDETME--
-
-CREATE PROCEDURE save_order_pizza(integer,integer)
-LANGUAGE 'plpgsql'
-AS $$
-
-BEGIN
-INSERT INTO pizza_siparis (pizza_id,siparis_id) VALUES ($1, $2);
-COMMIT;
-
-END;
-$$;
 
 --PİZZA KAYDETME--
 
-CREATE PROCEDURE save_pizza(integer,integer,integer,integer,integer,integer)
+CREATE PROCEDURE save_pizza(integer,integer,integer,integer,integer,integer,integer)
 LANGUAGE 'plpgsql'
 AS $$
 
 BEGIN
-INSERT INTO pizza (pizza_id, pizza_secenek_id, hamur_id, sos_id, boyut_id, peynir_id) VALUES ($1, $2, $3, $4, $5, $6);
+INSERT INTO pizza (pizza_id, pizza_secenek_id, hamur_id, sos_id, boyut_id, peynir_id, kenar_id) VALUES ($1, $2, $3, $4, $5, $6, $7);
 COMMIT;
 
 END;
 $$;
 
---KENAR KAYDETME--
-
-CREATE PROCEDURE save_side(integer,integer)
-LANGUAGE 'plpgsql'
-AS $$
-
-BEGIN
-INSERT INTO kenar_siparisi (siparis_id,kenar_id) VALUES ($1, $2);
-COMMIT;
-
-END;
-$$;
 
 --GÜNCELLEME--
 
