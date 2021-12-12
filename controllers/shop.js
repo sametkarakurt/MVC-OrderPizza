@@ -124,7 +124,19 @@ exports.postDeleteProduct = (req, res, next) => {
         .then(() => {
           Product.DeleteOrder(req.body.productid)
             .then(() => {
-              res.redirect("/products");
+              Product.DeletePizza(req.body.productid)
+                .then(() => {
+                  Product.DeleteCustomer(req.body.musteriId)
+                    .then(() => {
+                      res.redirect("/products");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             })
             .catch((err) => {
               console.log(err);

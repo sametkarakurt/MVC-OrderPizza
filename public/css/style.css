@@ -26,3 +26,9 @@
 .row {
   margin-top: 50px;
 }
+
+.banner {
+  display: block !important;
+  background-color: black;
+  height: 200px;
+}

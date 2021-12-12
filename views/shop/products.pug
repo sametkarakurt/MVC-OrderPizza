@@ -34,6 +34,7 @@ block content
 
                             form(action='/delete-product' method='POST')
                                 input(type='hidden' name='productid' value=`${product.siparis_id}`)
+                                input(type='hidden' name='musteriId' value=`${product.musteri_id}`)
                                 button(type='submit').btn.btn-danger.btn-sm Sil
     else
         h1 Sipariş Yok     
