@@ -139,7 +139,7 @@ module.exports = class Product {
     return client
       .query("SELECT deleteOrder($1);", [id])
       .then((result) => {
-        return result.rows[0];
+        return;
       })
       .catch((err) => {
         console.log(err);

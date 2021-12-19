@@ -457,7 +457,7 @@ LANGUAGE plpgsql
 AS $$
 begin 
 DELETE FROM siparis WHERE siparis.siparis_id=$1;
-return "Sipariş Silindi";
+return 'Sipariş Silindi';
 end;
 $$;
 
