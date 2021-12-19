@@ -89,7 +89,6 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
   const product = new Product();
   product.musteriId = req.body.musteriId;
-  console.log(req.body.musteriId);
   product.name = req.body.name;
   product.telefonNo = req.body.telefonNo;
   product.adres = req.body.adres;

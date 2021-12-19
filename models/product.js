@@ -95,11 +95,8 @@ module.exports = class Product {
 
   static getAll() {
     return client
-      .query(
-        "SELECT * FROM musteri JOIN siparis ON musteri.musteri_id = siparis.musteri_id JOIN odeme on odeme.odeme_id = siparis.odeme_id JOIN teslimat on teslimat.teslimat_id = siparis.teslimat_id JOIN sube on sube.sube_id = siparis.sube_id JOIN personel on personel.personel_id = siparis.personel_id"
-      )
+      .query("SELECT * FROM getAll();")
       .then((result) => {
-        console.log(result.rows);
         return result.rows;
       })
       .catch((err) => {
@@ -109,10 +106,7 @@ module.exports = class Product {
 
   static getById(id) {
     return client
-      .query(
-        "SELECT * FROM musteri JOIN siparis ON musteri.musteri_id = siparis.musteri_id WHERE siparis.siparis_id = $1",
-        [id]
-      )
+      .query("SELECT * FROM getMusteri($1)", [id])
       .then((result) => {
         return result.rows;
       })
@@ -123,10 +117,7 @@ module.exports = class Product {
 
   static getPizza(id) {
     return client
-      .query(
-        "SELECT * FROM pizza JOIN siparis on siparis.pizza_id = pizza.pizza_id JOIN kenar on kenar.kenar_id = pizza.kenar_id JOIN hamur on hamur.hamur_id = pizza.hamur_id JOIN sos on sos.sos_id = pizza.sos_id JOIN boyut on boyut.boyut_id = pizza.boyut_id JOIN peynir on peynir.peynir_id = pizza.peynir_id JOIN pizza_secenekleri on pizza_secenekleri.pizza_secenek_id = pizza.pizza_secenek_id WHERE siparis.siparis_id = $1",
-        [id]
-      )
+      .query("SELECT * FROM getPizza($1)", [id])
       .then((result) => {
         return result.rows;
       })
@@ -146,9 +137,9 @@ module.exports = class Product {
 
   static DeleteOrder(id) {
     return client
-      .query("DELETE FROM siparis WHERE siparis.siparis_id=$1", [id])
+      .query("SELECT deleteOrder($1);", [id])
       .then((result) => {
-        return result;
+        return result.rows[0];
       })
       .catch((err) => {
         console.log(err);
@@ -174,7 +165,6 @@ module.exports = class Product {
 
       .query("DELETE FROM musteri WHERE musteri_id = $1", [id])
       .then((result) => {
-        console.log(id);
         return result;
       })
       .catch((err) => {
